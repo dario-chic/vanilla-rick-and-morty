@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="app/assets/Rick-And-Morty-Logo.png">
+  <link rel="stylesheet" href="app/assets/normalize.css">
+  <link rel="stylesheet" href="app/assets/style.css">
+  <script src="https://kit.fontawesome.com/6aa699088f.js" crossorigin="anonymous"></script>
+  <title>Rick and Morty</title>
+</head>
+
+<body>
+  <div id="header"></div>
+  <main id="root"></main>
+  <script src="app/index.js" type="module"> </script>
+  <script>
+    let api = {
+      curiosities: [
+        {
+          title: 'El gran secreto de Rick',
+          content: 'Rick esconde un gran secreto, que tan solo un seguidor de la serie ha acertado hasta el momento.',
+          img: "app/assets/rick.png"
+        },
+        {
+          title: 'Justin Roiland pone voz a dos personajes principales',
+          content: 'Además de co-creador, guionista, animador, director y productor, Justin Roiland es el encargado de poner voz tanto a Rick como a Morty.',
+          img: "app/assets/justin-roiland.jpg"
+        },
+        {
+          title: 'Surgió de una parodia de "Volviendo al futuro"',
+          content: 'Confirmado: Rick y Morty derivan de una creación del mismo Justin Roiland, una serie web llamada The Real Animated Adventures of Doc and Mharti (en español, Las aventuras animadas reales de Doc y Mharti). ',
+          img: "app/assets/parody.jpg"
+        }
+      ],
+      description: `Rick and Morty is an American adult animated science fiction sitcom created by Justin Roiland and Dan Harmon for Cartoon Network's nighttime programming block Adult Swim. 
+
+      The series follows the misadventures of cynical mad scientist Rick Sanchez and his good-hearted, but fretful grandson Morty Smith, who split their time between domestic life and interdimensional adventures.`
+    }
+
+    let a = JSON.stringify(api)
+    // console.log(a)
+  </script>
+</body>
+
+</html>

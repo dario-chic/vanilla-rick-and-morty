@@ -139,6 +139,7 @@ export async function Router() {
 
 		if ((!hash.includes("ID=") && !lastUrl.includes("ID=")) || lastUrl == null || $Characters.innerHTML === "") {
 			$CharactersLoader.classList.remove("off");
+			$Characters.innerHTML = null;
 
 			d.querySelectorAll(".next-and-prev-buttons").forEach((el) => el.classList.add("off"));
 

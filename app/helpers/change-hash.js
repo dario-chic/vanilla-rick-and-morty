@@ -3,6 +3,8 @@ import pagination from "./pagination.js";
 
 export function changeHash() {
 	if (location.hash.includes("#/characters")) {
+		localStorage.setItem("lastHash", JSON.stringify(location.hash));
+
 		pagination.character.filters = `?page=${pagination.character.page}${pagination.character.name ? `&name=${pagination.character.name}` : ""}${pagination.character.gender ? `&gender=${pagination.character.gender}` : ""}${pagination.character.status ? `&status=${pagination.character.status}` : ""}`;
 
 		location.hash = `#/characters/${pagination.character.filters}`;

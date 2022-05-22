@@ -132,52 +132,55 @@ export async function Router() {
 			$main.appendChild($Characters);
 			$main.appendChild(ArrowContainer());
 		}
-
 		const $Characters = d.querySelector(".characters-container"),
 			$CharactersLoader = d.querySelector(".main-characters__loader");
 
-		$Characters.innerHTML = null;
-		$CharactersLoader.classList.remove("off");
+		let lastUrl = JSON.parse(localStorage.getItem("lastHash")) || "";
 
-		d.querySelectorAll(".next-and-prev-buttons").forEach((el) => el.classList.add("off"));
+		if ((!hash.includes("ID=") && !lastUrl.includes("ID=")) || lastUrl == null) {
+			$CharactersLoader.classList.remove("off");
 
-		let characterPage = extractParameter(hash, "page") || 1,
-			name = extractParameter(hash, "name") || "",
-			gender = extractParameter(hash, "gender") || "",
-			status = extractParameter(hash, "status") || "",
-			filters = `?page=${characterPage}${name ? `&name=${name}` : ""}${gender ? `&gender=${gender}` : ""}${status ? `&status=${status}` : ""}`;
+			d.querySelectorAll(".next-and-prev-buttons").forEach((el) => el.classList.add("off"));
 
-		console.log(filters);
-		ajax({
-			url: `https://rickandmortyapi.com/api/character/${filters}`,
-			cbSuccess: (json) => {
-				json.results.forEach((el) => {
-					$Characters.appendChild(Character(el, "characters"));
-				});
+			let characterPage = extractParameter(hash, "page") || 1,
+				name = extractParameter(hash, "name") || "",
+				gender = extractParameter(hash, "gender") || "",
+				status = extractParameter(hash, "status") || "",
+				filters = `?page=${characterPage}${name ? `&name=${name}` : ""}${gender ? `&gender=${gender}` : ""}${status ? `&status=${status}` : ""}`;
 
-				d.querySelectorAll(".next-and-prev-buttons").forEach((el) => (el.innerHTML = null));
-				d.querySelectorAll(".next-and-prev-buttons").forEach((el) => (el.innerHTML = Arrows(json)));
-				d.querySelectorAll(".next-and-prev-buttons").forEach((el) => el.classList.remove("off"));
+			ajax({
+				url: `https://rickandmortyapi.com/api/character/${filters}`,
+				cbSuccess: (json) => {
+					console.log("a");
+					$Characters.innerHTML = null;
+					json.results.forEach((el) => {
+						$Characters.appendChild(Character(el, "characters"));
+					});
 
-				$CharactersLoader.classList.add("off");
-			},
-			cbError: (err) => {
-				console.log(err);
-				$main.style.minHeight = "calc(100vh - 193.55px)";
-				d.querySelectorAll(".next-and-prev-buttons").forEach((el) => (el.innerHTML = null));
+					d.querySelectorAll(".next-and-prev-buttons").forEach((el) => (el.innerHTML = null));
+					d.querySelectorAll(".next-and-prev-buttons").forEach((el) => (el.innerHTML = Arrows(json)));
+					d.querySelectorAll(".next-and-prev-buttons").forEach((el) => el.classList.remove("off"));
 
-				let statusText = err.statusText || "An error has occurred.  ";
+					$CharactersLoader.classList.add("off");
+				},
+				cbError: (err) => {
+					console.log(err);
+					$main.style.minHeight = "calc(100vh - 193.55px)";
+					d.querySelectorAll(".next-and-prev-buttons").forEach((el) => (el.innerHTML = null));
 
-				$Characters.innerHTML = `
-				<div class="error-container">
-						<h3 class="error-message">Error: ${err.status} <br> ${statusText}</h3>
-						<p>There are no results for this request or something else is going wrong</p>
-						<button class="go-back">Go back</button>
-						</div> 
-						`;
-				$CharactersLoader.classList.add("off");
-			},
-		});
+					let statusText = err.statusText || "An error has occurred.  ";
+
+					$Characters.innerHTML = `
+		<div class="error-container">
+				<h3 class="error-message">Error: ${err.status} <br> ${statusText}</h3>
+				<p>There are no results for this request or something else is going wrong</p>
+				<button class="go-back">Go back</button>
+				</div> 
+				`;
+					$CharactersLoader.classList.add("off");
+				},
+			});
+		}
 
 		let characters = d.querySelectorAll(".characters");
 		characters.forEach((el) => (el.style.display = ""));

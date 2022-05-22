@@ -11,10 +11,13 @@ export function CharacterWindow() {
 		if (e.target.matches(".character *")) {
 			let character = e.target.parentElement,
 				ID = character.dataset.id;
+
+			localStorage.setItem("lastHash", JSON.stringify(location.hash));
 			location.hash += location.hash.slice(-1) == "/" ? `ID=${ID}` : `/ID=${ID}`;
 		}
 
 		if (e.target.matches(".close *") || e.target.matches(".info__container")) {
+			localStorage.setItem("lastHash", JSON.stringify(location.hash));
 			location.hash = location.hash.replace(/ID=[^&]+/gi, "");
 		}
 	});

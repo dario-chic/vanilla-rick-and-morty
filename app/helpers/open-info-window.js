@@ -14,8 +14,6 @@ export function openInfoWindow() {
 		ajax({
 			url: `https://rickandmortyapi.com/api/character/${extractParameter(location.hash, "ID")}`,
 			cbSuccess: (json) => {
-				console.log(json);
-
 				$div.innerHTML = CharacterInfo(json);
 			},
 			cbError: (err) => {

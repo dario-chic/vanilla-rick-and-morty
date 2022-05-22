@@ -137,7 +137,7 @@ export async function Router() {
 
 		let lastUrl = JSON.parse(localStorage.getItem("lastHash")) || "";
 
-		if ((!hash.includes("ID=") && !lastUrl.includes("ID=")) || lastUrl == null) {
+		if ((!hash.includes("ID=") && !lastUrl.includes("ID=")) || lastUrl == null || $Characters.innerHTML === "") {
 			$CharactersLoader.classList.remove("off");
 
 			d.querySelectorAll(".next-and-prev-buttons").forEach((el) => el.classList.add("off"));

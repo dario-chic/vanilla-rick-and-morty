@@ -5,6 +5,7 @@ import {Header} from "./components/Header.js";
 import {filtersDetection} from "./helpers/filters-detection.js";
 import {goBack} from "./helpers/go-back.js";
 import {openInfoWindow} from "./helpers/open-info-window.js";
+import pagination from "./helpers/pagination.js";
 import {changePage} from "./helpers/prev-and-next-btns.js";
 
 const d = document,
@@ -24,10 +25,14 @@ d.addEventListener("DOMContentLoaded", (e) => {
 	filtersDetection(); //Functions for activating filters in case
 	goBack(); // Go back one tab when certain buttons are pressed
 	openInfoWindow();
+	localStorage.clear("lastHash");
+	// console.log(JSON.parse(localStorage.getItem("lastHash")));
 });
 
 w.addEventListener("hashchange", (e) => {
 	App();
 	filtersDetection();
 	openInfoWindow();
+
+	// console.log(JSON.parse(localStorage.getItem("lastHash")));
 });

@@ -7,12 +7,15 @@ import {Description} from "./home/Description.js";
 import {MainCharacters} from "./home/MainCharacters.js";
 import {Character} from "./Character.js";
 import {SearchForm} from "./characters/SearchForm.js";
-import {Characters} from "./characters/Characters.js";
-import {Arrows} from "./characters/Arrows.js";
+import {Container} from "./Container.js";
+import {Arrows} from "./Arrows.js";
 import {extractParameter} from "../helpers/extract-parameter.js";
 import pagination from "../helpers/pagination.js";
 import {changeHash} from "../helpers/change-hash.js";
-import {ArrowContainer} from "./characters/ArrowContainer.js";
+import {ArrowContainer} from "./ArrowContainer.js";
+import {SearchEpisodes} from "./episodes/SearchEpisodes.js";
+import {Episode} from "./episodes/Episode.js";
+// import {filtersDetection} from "../helpers/filters-detection.js";
 
 export async function Router() {
 	const d = document,
@@ -79,7 +82,7 @@ export async function Router() {
 		}
 
 		if (!d.querySelector(".main-characters")) {
-			const $MainCharacters = MainCharacters(),
+			const $MainCharacters = MainCharacters("characters"),
 				$Characters = d.createElement("div"),
 				$mainCharactersLoader = Loader("main-characters__loader");
 
@@ -120,24 +123,24 @@ export async function Router() {
 		d.querySelector(".nav__links-characters").classList.add("active");
 
 		if (!d.querySelector(".characters")) {
-			const $Characters = Characters(),
+			const $Characters = Container("characters"),
 				$SearchForm = SearchForm(),
-				$arrowsContainer = d.createElement("div"),
 				$CharactersLoader = Loader("main-characters__loader", "off");
-			$arrowsContainer.classList.add("next-and-prev-buttons", "characters");
 
 			$main.appendChild($SearchForm);
-			$main.appendChild(ArrowContainer());
 			$main.appendChild($CharactersLoader);
 			$main.appendChild($Characters);
-			$main.appendChild(ArrowContainer());
+			$main.appendChild(ArrowContainer("characters"));
 		}
-		const $Characters = d.querySelector(".characters-container"),
+		const $Characters = d.querySelector(".container.characters"),
 			$CharactersLoader = d.querySelector(".main-characters__loader");
+
+		let reg = /ID=[0-9]+\//gi;
 
 		let lastUrl = JSON.parse(localStorage.getItem("lastHash")) || "";
 
-		if ((!hash.includes("ID=") && !lastUrl.includes("ID=")) || lastUrl == null || $Characters.innerHTML === "") {
+		if ((!hash.includes("ID=") && !lastUrl.includes("ID=")) || lastUrl == null || $Characters.innerHTML === "" || !lastUrl.includes("#/characters")) {
+			// console.log("a");
 			$CharactersLoader.classList.remove("off");
 			$Characters.innerHTML = null;
 
@@ -149,20 +152,21 @@ export async function Router() {
 				status = extractParameter(hash, "status") || "",
 				filters = `?page=${characterPage}${name ? `&name=${name}` : ""}${gender ? `&gender=${gender}` : ""}${status ? `&status=${status}` : ""}`;
 
+			const $fragment = d.createDocumentFragment();
+
 			ajax({
 				url: `https://rickandmortyapi.com/api/character/${filters}`,
 				cbSuccess: (json) => {
-					console.log("a");
-					$Characters.innerHTML = null;
 					json.results.forEach((el) => {
-						$Characters.appendChild(Character(el, "characters"));
+						$fragment.appendChild(Character(el, "characters"));
 					});
 
-					d.querySelectorAll(".next-and-prev-buttons").forEach((el) => (el.innerHTML = null));
-					d.querySelectorAll(".next-and-prev-buttons").forEach((el) => (el.innerHTML = Arrows(json)));
-					d.querySelectorAll(".next-and-prev-buttons").forEach((el) => el.classList.remove("off"));
+					d.querySelectorAll(".next-and-prev-buttons.characters").forEach((el) => (el.innerHTML = null));
+					d.querySelectorAll(".next-and-prev-buttons.characters").forEach((el) => (el.innerHTML = Arrows(json)));
+					d.querySelectorAll(".next-and-prev-buttons.characters").forEach((el) => el.classList.remove("off"));
 
 					$CharactersLoader.classList.add("off");
+					$Characters.appendChild($fragment);
 				},
 				cbError: (err) => {
 					console.log(err);
@@ -183,16 +187,118 @@ export async function Router() {
 			});
 		}
 
-		let characters = d.querySelectorAll(".characters");
-		characters.forEach((el) => (el.style.display = ""));
+		d.querySelectorAll(".characters").forEach((el) => (el.style.display = ""));
 	} else {
-		let characters = d.querySelectorAll(".characters");
-		characters.forEach((el) => (el.style.display = "none"));
+		d.querySelectorAll(".characters").forEach((el) => (el.style.display = "none"));
 		d.querySelector(".nav__links-characters").classList.remove("active");
 
 		pagination.character.gender = null;
 		pagination.character.status = null;
+		pagination.character.name = null;
 		pagination.character.page = 1;
-		changeHash();
+		// changeHash();
+	}
+
+	if (hash === "#/episodes" || hash.includes("#/episodes")) {
+		d.querySelector(".nav__links-episodes").classList.add("active");
+
+		if (!d.querySelector(".episodes")) {
+			const $Episodes = Container("episodes"),
+				$SearchEpisodes = SearchEpisodes(),
+				$EpisodesLoader = Loader("main-episodes__loader", "off");
+			$EpisodesLoader.classList.add("off");
+
+			$main.appendChild($SearchEpisodes);
+			$main.appendChild($EpisodesLoader);
+			$main.appendChild($Episodes);
+			$main.appendChild(ArrowContainer("episodes"));
+		}
+		const $Episodes = d.querySelector(".container.episodes"),
+			$EpisodesLoader = d.querySelector(".main-episodes__loader");
+
+		let lastUrl = JSON.parse(localStorage.getItem("lastHash")) || "";
+
+		if ((!hash.includes("ID=") && !lastUrl.includes("ID=")) || lastUrl == null || $Episodes.innerHTML === "" || !lastUrl.includes("#/episodes")) {
+			d.querySelectorAll(".next-and-prev-buttons").forEach((el) => el.classList.add("off"));
+
+			$Episodes.innerHTML = null;
+			$EpisodesLoader.classList.remove("off");
+
+			let page = extractParameter(hash, "page") || 1,
+				nombre = extractParameter(hash, "name") || "",
+				episodeFilters = `?page=${page}${nombre ? `&name=${nombre}` : ""}`;
+
+			console.log(episodeFilters);
+			const $fragment = document.createDocumentFragment();
+
+			ajax({
+				url: `https://rickandmortyapi.com/api/episode/${episodeFilters}`,
+				cbSuccess: (json) => {
+					$Episodes.innerHTML = null;
+
+					json.results.forEach((el) => {
+						let episodeAndSeason = [...el.episode.matchAll(/\d+/gi)],
+							info = {season: episodeAndSeason[0][0], episode: episodeAndSeason[1][0]};
+
+						ajax({
+							url: `https://api.tvmaze.com/shows/216/episodebynumber?season=${info.season}&number=${info.episode}`,
+							cbSuccess: (episode) => {
+								// console.log(json);
+								$fragment.appendChild(Episode(episode, "episodes"));
+								if (el === json.results[json.results.length - 1]) {
+									$Episodes.appendChild($fragment);
+								}
+							},
+							cbError: (err) => {
+								console.log(err);
+								$main.style.minHeight = "calc(100vh - 193.55px)";
+								d.querySelectorAll(".next-and-prev-buttons").forEach((el) => (el.innerHTML = null));
+
+								let statusText = err.statusText || "An error has occurred.  ";
+
+								$Episodes.innerHTML = `
+						<div class="error-container">
+								<h3 class="error-message">Error: ${err.status} <br> ${statusText}</h3>
+								<p>There are no results for this request or something else is going wrong</p>
+								<button class="go-back">Go back</button>
+								</div> 
+								`;
+								$EpisodesLoader.classList.add("off");
+							},
+						});
+					});
+
+					d.querySelector(".next-and-prev-buttons.episodes").innerHTML = null;
+					d.querySelector(".next-and-prev-buttons.episodes").innerHTML = Arrows(json);
+					d.querySelector(".next-and-prev-buttons.episodes").classList.remove("off");
+
+					$EpisodesLoader.classList.add("off");
+				},
+				cbError: (err) => {
+					console.log(err);
+					$main.style.minHeight = "calc(100vh - 193.55px)";
+					d.querySelectorAll(".next-and-prev-buttons").forEach((el) => (el.innerHTML = null));
+
+					let statusText = err.statusText || "An error has occurred.  ";
+
+					$Episodes.innerHTML = `
+			<div class="error-container">
+					<h3 class="error-message">Error: ${err.status} <br> ${statusText}</h3>
+					<p>There are no results for this request or something else is going wrong</p>
+					<button class="go-back">Go back</button>
+					</div> 
+					`;
+					$EpisodesLoader.classList.add("off");
+				},
+			});
+		}
+
+		d.querySelectorAll(".episodes").forEach((el) => (el.style.display = ""));
+	} else {
+		d.querySelector(".nav__links-episodes").classList.remove("active");
+		d.querySelectorAll(".episodes").forEach((el) => (el.style.display = "none"));
+
+		pagination.episodes.page = 1;
+		pagination.episodes.name = null;
 	}
 }

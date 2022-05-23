@@ -8,12 +8,18 @@ export function CharacterWindow() {
 	$div.classList.add("info-window");
 
 	document.addEventListener("click", (e) => {
-		if (e.target.matches(".character *")) {
-			let character = e.target.parentElement,
-				ID = character.dataset.id;
+		if (e.target.matches(".character-links *") || e.target.matches(".episodes-links *")) {
+			e.preventDefault();
+			let father = e.target.parentElement,
+				ID = father.dataset.id;
 
 			localStorage.setItem("lastHash", JSON.stringify(location.hash));
-			location.hash += location.hash.slice(-1) == "/" ? `ID=${ID}` : `/ID=${ID}`;
+			location.hash += location.hash.slice(-1) == "/" ? `ID=${ID}/` : `/ID=${ID}/`;
+			// console.log(location.hash);
+
+			// setTimeout(() => {
+			// 	console.log(location.hash);
+			// }, 100);
 		}
 
 		if (e.target.matches(".close *") || e.target.matches(".info__container")) {

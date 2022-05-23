@@ -7,11 +7,18 @@
 
 html {
 	font-family: "Open Sans";
+	scroll-behavior: smooth;
 }
 
 #root {
 	min-height: calc(100vh - 193.55px);
 	background-color: var(--black);
+}
+
+a {
+	color: #000;
+	text-decoration: none;
+	font-size: 18px;
 }
 
 .header {
@@ -229,7 +236,8 @@ html {
 	/* padding: 1rem; */
 }
 
-.character {
+.character,
+.episodes__episodes {
 	margin: 2rem auto;
 	margin-top: 0;
 	width: 80%;
@@ -237,19 +245,26 @@ html {
 	transition: transform 0.3s ease;
 }
 
-.character img {
+.character img,
+.episodes img {
 	border-radius: 1.5rem;
 	width: 100%;
 }
 
-.character:hover {
+.character:hover,
+.episodes__episodes:hover {
 	transform: scale(1.1);
 }
-.character figcaption {
+.character figcaption,
+.episodes figcaption {
 	font-size: 1.8rem;
 	font-weight: 700;
 	color: var(--lightBlue);
 	text-align: center;
+}
+
+.character-links {
+	text-decoration: none;
 }
 
 .footer {
@@ -313,7 +328,8 @@ html {
 
 /* Characters */
 
-.search-form {
+.search-form,
+.search-episodes {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -323,7 +339,8 @@ html {
 	height: auto;
 }
 
-.search-form__form {
+.search-form__form,
+.search-episodes {
 	position: relative;
 	display: flex;
 	justify-content: center;
@@ -334,7 +351,8 @@ html {
 	color: var(--green);
 }
 
-.search-form__form input {
+.search-form__form input,
+.search-episode input {
 	margin-right: 0.5rem;
 	border-radius: 0.4rem;
 	border: none;
@@ -347,22 +365,32 @@ html {
 	color: var(--black);
 }
 
-.search-form__form input::placeholder {
+.search-episode {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+.search-form__form input::placeholder,
+.search-episode input::placeholder {
 	font-style: italic;
 	padding: 0.5rem;
 }
 
-.search-form__form button {
+.search-form__form button,
+.search-episode button {
 	background: none;
 	border: none;
 }
 
-.search-form__form button i {
+.search-form__form button i,
+.search-episode button i {
 	font-size: 1.5rem;
 	cursor: pointer;
 	color: var(--green);
 }
-.search-form__form > button i:hover {
+.search-form__form > button i:hover,
+.search-episode > button i:hover {
 	color: var(--darkGreen);
 }
 
@@ -374,6 +402,10 @@ html {
 	font-size: 1.4rem;
 	color: var(--green);
 	z-index: 999;
+}
+
+.search-episode input {
+	width: 80%;
 }
 
 /* .search-form__filters:hover > .filters {
@@ -391,6 +423,46 @@ html {
 .search-form__filters i {
 	font-size: 0.8rem;
 	margin-left: 0.3rem;
+}
+
+.search-episodes {
+	display: flex;
+	padding: 2.5rem;
+	justify-content: center;
+	color: var(--green);
+	font-size: 1.3rem;
+	font-weight: 800;
+}
+
+.search-episodes__form {
+	display: flex;
+}
+
+/* .search-episodes input {
+	margin-right: 0.5rem;
+	border-radius: 0.4rem;
+	border: none;
+	padding: 1rem;
+	height: 2.5rem;
+	width: 7rem;
+	max-width: 10vh;
+	font-size: 1.2rem;
+	font-weight: 700;
+	color: var(--black);
+} */
+
+.search-submit {
+	background: none;
+	border: none;
+}
+
+.search-submit i {
+	font-size: 1.8rem;
+	cursor: pointer;
+	color: var(--green);
+}
+.search-submit:hover > i {
+	color: var(--darkGreen);
 }
 
 /* .search-form__filters > span {
@@ -509,6 +581,7 @@ html {
 	margin: auto;
 	/* width: 60%; */
 	min-width: 60rem;
+	max-width: 80%;
 	min-height: 30%;
 	height: auto;
 	color: var(--green);
@@ -528,14 +601,14 @@ html {
 	cursor: pointer;
 }
 
-.character-profile {
+.profile {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	margin-bottom: 0.7rem;
 }
 
-.character-profile img {
+.profile.characters img {
 	margin: auto;
 	margin-bottom: 1rem;
 	border-radius: 50%;
@@ -543,7 +616,16 @@ html {
 	outline: solid 4px var(--green);
 }
 
-.character-profile figcaption {
+.profile.episodes img {
+	border-radius: 20%;
+	width: 400px;
+	margin: auto;
+	margin-bottom: 1rem;
+	object-fit: cover;
+	outline: solid 4px var(--green);
+}
+
+.profile figcaption {
 	font-size: 2.5rem;
 	font-weight: 900;
 	text-align: center;
@@ -595,13 +677,18 @@ html {
 	margin: auto;
 }
 
-.characters-container {
+.container {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(300px, 0.7fr));
 	justify-content: center;
 	align-content: center;
 	margin-bottom: 1.5rem;
+	padding-top: 4rem;
 	background-color: var(--black);
+}
+
+.container.characters {
+	margin-top: 1rem;
 }
 
 .error-container {
@@ -705,14 +792,49 @@ html {
 	color: #107d8c;
 }
 
+.airdate {
+	color: #e9791d;
+}
+
+.s {
+	color: var(--lightBlue);
+}
+
+.e {
+	color: #ffea00;
+}
+
 .next-and-prev-buttons button:hover {
 	color: var(--darkGreen);
 }
 
+.br {
+	display: none;
+}
+
+.info-window p {
+	margin-top: -0.5rem;
+	width: 80%;
+	text-align: center;
+	font-size: 1rem;
+}
+
+.episode-content summary {
+	/* text-align: center; */
+	margin: 1rem;
+	font-weight: 800;
+}
+
+.episode-content article {
+	display: flex;
+	justify-content: center;
+	margin: auto;
+}
+
 @media only screen and (max-width: 1400px) {
-	.description {
+	/* .description {
 		flex-direction: column;
-	}
+	} */
 
 	.description__info {
 		padding: 1.5rem;
@@ -780,6 +902,10 @@ html {
 		bottom: -45px;
 	}
 
+	/* .search-form__filters span {
+
+	} */
+
 	.search-form__form input {
 		width: 100%;
 	}
@@ -789,7 +915,17 @@ html {
 	}
 
 	.info-window {
-		width: 98% !important;
+		max-width: 90% !important;
+	}
+
+	.header__main-title {
+		font-size: 2.4rem;
+		line-height: 3rem;
+	}
+
+	.header__main-text {
+		font-size: 1.5rem;
+		line-height: 2rem;
 	}
 }
 @media only screen and (max-width: 500px) {
@@ -805,11 +941,22 @@ html {
 	.description__info img {
 		width: 100%;
 	}
-	.header__main-content {
+
+	.header__main-title {
+		font-size: 1.5rem;
+		line-height: 2rem;
+	}
+
+	.header__main-text {
+		font-size: 1rem;
+		line-height: 1.2rem;
+	}
+
+	.header__main-content .slider-btns {
 		display: none;
 	}
 
-	.character-profile img {
+	.profile img {
 		margin: auto;
 		margin-bottom: 1rem;
 		border-radius: 50%;
@@ -818,7 +965,7 @@ html {
 		outline: solid 2px var(--green);
 	}
 
-	.character-profile figcaption {
+	.profile figcaption {
 		font-size: 1.85rem;
 	}
 
@@ -834,10 +981,14 @@ html {
 	.features tbody td {
 		font-size: 1rem;
 	}
+
+	.info-window {
+		max-width: 100% !important;
+	}
 }
 
 @media only screen and (max-height: 750px) {
-	.character-profile img {
+	.profile img {
 		margin: auto;
 		margin-bottom: 1rem;
 		border-radius: 50%;
@@ -846,7 +997,7 @@ html {
 		outline: solid 2px var(--green);
 	}
 
-	.character-profile figcaption {
+	.profile figcaption {
 		font-size: 1.85rem;
 	}
 

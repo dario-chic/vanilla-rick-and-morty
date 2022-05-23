@@ -1,19 +1,22 @@
-import {filtersDetection} from "./filters-detection.js";
+// import {filtersDetection} from "./filters-detection.js";
 import pagination from "./pagination.js";
 
 export function changeHash() {
 	if (location.hash.includes("#/characters")) {
-		localStorage.setItem("lastHash", JSON.stringify(location.hash));
-
 		pagination.character.filters = `?page=${pagination.character.page}${pagination.character.name ? `&name=${pagination.character.name}` : ""}${pagination.character.gender ? `&gender=${pagination.character.gender}` : ""}${pagination.character.status ? `&status=${pagination.character.status}` : ""}`;
 
-		location.hash = `#/characters/${pagination.character.filters}`;
+		location.hash = `#/characters/${pagination.character.filters}/`;
 		// document.querySelector(".nav__links-characters").href = `#/characters/${pagination.character.filters}`;
 	}
 
 	if (location.hash.includes("#/episodes")) {
-		location.hash = `#/episodes/${pagination.episodes.filters}`;
+		// localStorage.setItem("lastHash", JSON.stringify(location.hash));
+
+		pagination.episodes.filters = `?page=${pagination.episodes.page}${pagination.episodes.name ? `&name=${pagination.episodes.name}` : ""}`;
+
+		location.hash = `#/episodes/${pagination.episodes.filters}/`;
 	}
-	filtersDetection();
+
+	// filtersDetection();
 	// console.log(pagination.character);
 }

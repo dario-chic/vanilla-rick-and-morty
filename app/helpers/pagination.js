@@ -9,10 +9,11 @@ let characterPage = extractParameter(hash, "page") || 1,
 	filters = `?page=${characterPage}${name ? `&name=${name}` : ""}${gender ? `&gender=${gender}` : ""}${status ? `&status=${status}` : ""}`;
 
 let episodesPage = extractParameter(hash, "page") || 1,
-	season = extractParameter("season"),
-	episode = extractParameter("episode");
+	season = extractParameter(hash, "season") || "",
+	episode = extractParameter(hash, "cap") || "",
+	nombre = extractParameter(hash, "name") || "";
 
 export default {
 	character: {page: characterPage, gender, name, status, filters: `?page=${characterPage}${name ? `&name=${name}` : ""}${gender ? `&gender=${gender}` : ""}${status ? `&status=${status}` : ""}`},
-	episodes: {page: episodesPage, season, episode, filters: ""},
+	episodes: {page: episodesPage, name: nombre, filters: `?page=${episodesPage}${name ? `&name=${name}` : ""}`},
 };

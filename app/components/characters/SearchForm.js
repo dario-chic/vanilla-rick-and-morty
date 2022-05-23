@@ -9,6 +9,7 @@ export function SearchForm() {
 	// With this Listener change the hash depending which filter was activated
 	d.addEventListener("click", (e) => {
 		if (e.target.matches(".filters span i")) {
+			localStorage.clear("lastHash");
 			if (e.target.dataset.gender) {
 				pagination.character.gender = e.target.dataset.gender;
 				pagination.character.page = 1;
@@ -41,7 +42,9 @@ export function SearchForm() {
 	d.addEventListener("submit", (e) => {
 		if (e.target.matches(".search-form__form")) {
 			e.preventDefault();
-			pagination.character.name = e.target.search.value;
+			pagination.character.page = 1;
+			pagination.character.name = d.getElementById("search-form").search.value;
+			localStorage.clear("lastHash");
 			changeHash();
 		}
 	});

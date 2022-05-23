@@ -80,7 +80,7 @@ export function CharacterInfo(json) {
 
 	return `
 	<button class="close"><i class="fa-solid fa-circle-arrow-left"></i></button>
-	<figure class="character-profile">
+	<figure class="profile characters">
 	<img src="${json.image}" alt="" >
 	<figcaption>${json.name.toUpperCase()}</figcaption>
 	</figure>

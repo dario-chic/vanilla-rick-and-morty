@@ -4,7 +4,7 @@ export function Menu() {
 	$nav.classList.add("nav");
 
 	$nav.innerHTML = `
-  <img src="app/assets/Rick-And-Morty-Logo.png" alt="Rick and Morty"  class="nav__logo-img">
+  <a href="#/"><img src="app/assets/Rick-And-Morty-Logo.png" alt="Rick and Morty"  class="nav__logo-img"></a>
   <i class="fa-solid fa-bars"></i>
   <div class="nav__links">
   <a href="#/" class="nav__links-home">Home</a>

@@ -5,7 +5,7 @@ import {ajax} from "./ajax.js";
 import {extractParameter} from "./extract-parameter.js";
 
 export function openInfoWindow() {
-	if (location.hash.includes("/ID=")) {
+	if (location.hash.includes("/ID=") || location.hash.includes("#/")) {
 		document.querySelector(".info__container").classList.add("active");
 
 		const $div = document.querySelector(".info-window");

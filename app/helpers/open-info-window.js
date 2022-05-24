@@ -5,14 +5,14 @@ import {ajax} from "./ajax.js";
 import {extractParameter} from "./extract-parameter.js";
 
 export function openInfoWindow() {
-	if (location.hash.includes("/ID=") || location.hash.includes("#/")) {
+	if (location.hash.includes("/ID=")) {
 		document.querySelector(".info__container").classList.add("active");
 
 		const $div = document.querySelector(".info-window");
 		$div.innerHTML = null;
 		$div.appendChild(Loader("info__loader"));
 
-		if (location.hash.includes("#/characters")) {
+		if (location.hash.includes("#/characters") || location.hash.includes("#/ID=")) {
 			ajax({
 				url: `https://rickandmortyapi.com/api/character/${extractParameter(location.hash, "ID")}`,
 				cbSuccess: (json) => {

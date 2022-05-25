@@ -34,7 +34,7 @@ export function openInfoWindow() {
 				},
 			});
 		} else if (location.hash.includes("#/episodes")) {
-			l;
+			
 			ajax({
 				url: `https://api.tvmaze.com/episodes/${extractParameter(location.hash, "ID")}`,
 				cbSuccess: (json) => {

@@ -1,3 +1,4 @@
+// Componente para crear el html de cada episodio.
 export function Episode(json, container) {
 	const $a = document.createElement("a"),
 		$figure = document.createElement("figure");

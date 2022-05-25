@@ -1,3 +1,4 @@
+// Componente para crear los elementos y la información (de personajes) que será pintada en la ventana de información(Se rellena el el Router)
 export function CharacterInfo(json) {
 	const gender = (json) => {
 		let icon = "";

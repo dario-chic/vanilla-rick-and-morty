@@ -10,19 +10,21 @@ import {SearchForm} from "./characters/SearchForm.js";
 import {Container} from "./Container.js";
 import {Arrows} from "./Arrows.js";
 import {extractParameter} from "../helpers/extract-parameter.js";
-import pagination from "../helpers/pagination.js";
 import {ArrowContainer} from "./ArrowContainer.js";
 import {SearchEpisodes} from "./episodes/SearchEpisodes.js";
 import {Episode} from "./episodes/Episode.js";
+import pagination from "../helpers/pagination.js";
 
+// Este es el corazón de la aplicación, esta función es la encargada de pintar la información correspondiente de las distintas secciones en base al HASH..
 export async function Router() {
+	let {hash} = location;
+
 	const d = document,
 		$main = d.getElementById("root");
 
-	let {hash} = location;
-
 	if (!hash || hash === "#/" || hash.includes("#/ID=")) {
 		d.querySelector(".nav__links-home").classList.add("active");
+		d.querySelectorAll(".home").forEach((el) => (el.style.display = ""));
 
 		const $header = d.querySelector("header");
 
@@ -105,10 +107,7 @@ export async function Router() {
 				},
 				cbError: () => {},
 			});
-		} else {
 		}
-
-		d.querySelectorAll(".home").forEach((el) => (el.style.display = ""));
 	} else {
 		d.querySelector(".nav__links-home").classList.remove("active");
 		d.querySelectorAll(".home").forEach((el) => (el.style.display = "none"));
@@ -116,10 +115,12 @@ export async function Router() {
 
 	if (hash === "#/characters" || hash.includes("#/characters")) {
 		d.querySelector(".nav__links-characters").classList.add("active");
+		d.querySelectorAll(".characters").forEach((el) => (el.style.display = ""));
 
 		if (!d.querySelector(".characters")) {
+			// Este condicional verifica si ya los elementos de esta sección fueron pintados anteriormente, si no es así, los crea y los agrega y si ya existen lo ignora y pasa a lo siguiente.
 			const $Characters = Container("characters"),
-				$SearchForm = SearchForm(),
+				$SearchForm = SearchForm("characters"),
 				$CharactersLoader = Loader("main-characters__loader", "off");
 
 			$main.appendChild($SearchForm);
@@ -133,34 +134,32 @@ export async function Router() {
 		let lastUrl = JSON.parse(localStorage.getItem("lastHash")) || "";
 
 		if ((!hash.includes("ID=") && !lastUrl.includes("ID=")) || lastUrl == null || $Characters.innerHTML === "" || !lastUrl.includes("#/characters")) {
+			/*Este condicional a simple vista es dificil entenderlo, pero lo que hace es verificar ciertos parametros, si alguno de ellos da True, entonces entra al bloque  y actualiza y pinta de nuevo la información con los datos de los cambios dados en la URL, si todos dan false, lo ignora y todo se mantiene igual.
+			
+			La idea es no hacer peticiones Ajax y actualización de información innecesaria en cada cambio de Hash (es decir, volver a pintar lo que ya esta en pantalla)
+			sino hacerlo solo cuando sea realmente necesaria la petición y actualización de información*/
+
 			d.querySelectorAll(".next-and-prev-buttons").forEach((el) => el.classList.add("off"));
 
 			$CharactersLoader.classList.remove("off");
 			$Characters.innerHTML = null;
 
-			let characterPage = extractParameter(hash, "page") || 1,
-				name = extractParameter(hash, "name") || "",
-				gender = extractParameter(hash, "gender") || "",
-				status = extractParameter(hash, "status") || "",
-				filters = `?page=${characterPage}${name ? `&name=${name}` : ""}${gender ? `&gender=${gender}` : ""}${status ? `&status=${status}` : ""}`;
 			const $fragment = d.createDocumentFragment();
-
 			ajax({
-				url: `https://rickandmortyapi.com/api/character/${filters}`,
+				url: `https://rickandmortyapi.com/api/character/${pagination.FILTER}`,
 				cbSuccess: (json) => {
 					json.results.forEach((el) => {
 						$fragment.appendChild(Character(el, "characters"));
 					});
 
-					d.querySelectorAll(".next-and-prev-buttons.characters").forEach((el) => (el.innerHTML = null));
-					d.querySelectorAll(".next-and-prev-buttons.characters").forEach((el) => (el.innerHTML = Arrows(json)));
-					d.querySelectorAll(".next-and-prev-buttons.characters").forEach((el) => el.classList.remove("off"));
+					d.querySelector(".next-and-prev-buttons.characters").innerHTML = null;
+					d.querySelector(".next-and-prev-buttons.characters").innerHTML = Arrows(json);
+					d.querySelector(".next-and-prev-buttons.characters").classList.remove("off");
 
 					$CharactersLoader.classList.add("off");
 					$Characters.appendChild($fragment);
 				},
 				cbError: (err) => {
-					console.log(err);
 					$main.style.minHeight = "calc(100vh - 193.55px)";
 					d.querySelectorAll(".next-and-prev-buttons").forEach((el) => (el.innerHTML = null));
 
@@ -170,27 +169,22 @@ export async function Router() {
 		<div class="error-container">
 				<h3 class="error-message">Error: ${err.status} <br> ${statusText}</h3>
 				<p>There are no results for this request or something else is going wrong</p>
-				<button class="go-back">Go back</button>
+				<button class="go-back">Go back</button><br><button class="go-home" >Reload</button>
 				</div> 
 				`;
 					$CharactersLoader.classList.add("off");
 				},
 			});
 		}
-
-		d.querySelectorAll(".characters").forEach((el) => (el.style.display = ""));
 	} else {
 		d.querySelectorAll(".characters").forEach((el) => (el.style.display = "none"));
 		d.querySelector(".nav__links-characters").classList.remove("active");
-
-		pagination.character.gender = null;
-		pagination.character.status = null;
-		pagination.character.name = null;
-		pagination.character.page = 1;
 	}
 
 	if (hash === "#/episodes" || hash.includes("#/episodes")) {
+		/*Este condicional funciona exactamente igual que el de characters */
 		d.querySelector(".nav__links-episodes").classList.add("active");
+		d.querySelectorAll(".episodes").forEach((el) => (el.style.display = ""));
 
 		if (!d.querySelector(".episodes")) {
 			const $Episodes = Container("episodes"),
@@ -214,13 +208,10 @@ export async function Router() {
 			$Episodes.innerHTML = null;
 			$EpisodesLoader.classList.remove("off");
 
-			let page = extractParameter(hash, "page") || 1,
-				nombre = extractParameter(hash, "name") || "",
-				episodeFilters = `?page=${page}${nombre ? `&name=${nombre}` : ""}`;
 			const $fragment = document.createDocumentFragment();
 
 			ajax({
-				url: `https://rickandmortyapi.com/api/episode/${episodeFilters}`,
+				url: `https://rickandmortyapi.com/api/episode/${pagination.FILTER}`,
 				cbSuccess: (json) => {
 					$Episodes.innerHTML = null;
 
@@ -231,7 +222,6 @@ export async function Router() {
 						ajax({
 							url: `https://api.tvmaze.com/shows/216/episodebynumber?season=${info.season}&number=${info.episode}`,
 							cbSuccess: (episode) => {
-								// console.log(json);
 								$fragment.appendChild(Episode(episode, "episodes"));
 								if (el === json.results[json.results.length - 1]) {
 									$Episodes.appendChild($fragment);
@@ -279,24 +269,19 @@ export async function Router() {
 				},
 			});
 		}
-
-		d.querySelectorAll(".episodes").forEach((el) => (el.style.display = ""));
 	} else {
 		d.querySelector(".nav__links-episodes").classList.remove("active");
 		d.querySelectorAll(".episodes").forEach((el) => (el.style.display = "none"));
-
-		pagination.episodes.page = 1;
-		pagination.episodes.name = null;
 	}
 
 	if (hash.includes("#/") && hash !== "#/" && !hash.includes("#/ID=") && !hash.includes("#/characters") && !hash.includes("#/episodes")) {
 		console.log($main);
-		// $main.innerHTML = `<div class="error-container" id='bad-url'>
-		// <h3 class="error-message" >ERROR</h3>
-		// <p>There are no results for this request or something else is going wrong</p>
-		// <button class="go-home" onclick="this.parentElement.parentElement.removeChild(document.getElementById('bad-url')); location.hash='#/'">Go Home</button>
-		// </div>
-		// `;
+		$main.innerHTML = `<div class="error-container" id='bad-url'>
+		<h3 class="error-message" >ERROR</h3>
+		<p>There are no results for this request or something else is going wrong</p>
+		<button class="go-home" onclick="this.parentElement.parentElement.removeChild(document.getElementById('bad-url')); location.hash='#/'">Go Home</button>
+		</div>
+		`;
 
 		location.hash = "#/";
 	}

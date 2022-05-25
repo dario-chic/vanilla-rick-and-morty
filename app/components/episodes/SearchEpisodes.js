@@ -1,6 +1,8 @@
 import {changeHash} from "../../helpers/change-hash.js";
 import pagination from "../../helpers/pagination.js";
 
+/* Debido a algunos inconvenientes a los que no encontré una solución optima, cree otro componente de SearchForm para la sección de Episodes, este funciona
+exactamente igual que el original, pero no tiene aplicado los filtros (ya que esta sección no los usa)*/
 export function SearchEpisodes() {
 	const d = document,
 		$div = d.createElement("div");
@@ -14,7 +16,6 @@ export function SearchEpisodes() {
 	d.addEventListener("click", (e) => {
 		if (e.target.matches(".submit-episode > i")) {
 			e.preventDefault();
-			console.log(e.target);
 			d.getElementById("search-episode").submit();
 		}
 	});
@@ -22,9 +23,8 @@ export function SearchEpisodes() {
 	d.addEventListener("submit", (e) => {
 		if (e.target.matches(".search-episode")) {
 			e.preventDefault();
-			pagination.episodes.page = 1;
-			pagination.episodes.name = d.getElementById("search-episode").search.value;
-			console.log(pagination.episodes);
+			pagination.PAGE = 1;
+			pagination.NAME = d.getElementById("search-episode").search.value;
 			localStorage.clear("lastHash");
 			changeHash();
 		}

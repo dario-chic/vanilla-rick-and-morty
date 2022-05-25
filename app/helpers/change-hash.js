@@ -1,15 +1,13 @@
 import pagination from "./pagination.js";
 
+/*Funcion de ayuda para modificación de HASH,
+al ser una SPA que funciona pintando la información en base a los cambios de HASH,
+cuando es llamada esta función ayuda a cambiar el Hash en  base a los datos de paginación otorgados*/
 export function changeHash() {
-	if (location.hash.includes("#/characters")) {
-		pagination.character.filters = `?page=${pagination.character.page}${pagination.character.name ? `&name=${pagination.character.name}` : ""}${pagination.character.gender ? `&gender=${pagination.character.gender}` : ""}${pagination.character.status ? `&status=${pagination.character.status}` : ""}`;
+	if (location.hash.includes("#/characters"))
+		location.hash = `#/characters/?page=${pagination.PAGE}${pagination.NAME ? `&name=${pagination.NAME}` : ""}${pagination.character.gender ? `&gender=${pagination.character.gender}` : ""}${pagination.character.status ? `&status=${pagination.character.status}` : ""}${
+			pagination.ID ? `/ID=${pagination.ID}` : ""
+		}`;
 
-		location.hash = `#/characters/${pagination.character.filters}/`;
-	}
-
-	if (location.hash.includes("#/episodes")) {
-		pagination.episodes.filters = `?page=${pagination.episodes.page}${pagination.episodes.name ? `&name=${pagination.episodes.name}` : ""}`;
-
-		location.hash = `#/episodes/${pagination.episodes.filters}/`;
-	}
+	if (location.hash.includes("#/episodes")) location.hash = `#/episodes/?page=${pagination.PAGE}${pagination.NAME ? `&name=${pagination.NAME}` : ""}${pagination.ID ? `/ID=${pagination.ID}` : ""}`;
 }

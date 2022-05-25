@@ -1,3 +1,4 @@
+/*Funcion de ayuda para peticiones Ajax, ayuda a no repetir el código y optimizar la app en el pedido de datos.*/
 export async function ajax(props) {
 	let {url, cbSuccess, cbError} = props;
 

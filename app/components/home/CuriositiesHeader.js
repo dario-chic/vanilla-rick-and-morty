@@ -1,3 +1,4 @@
+//Componente para crear cada elemento en el carrusel de Curiosidades en el header del Home.
 export function CuriositiesHeader(el, curiosities) {
 	return `
   <article class="header__main ${el === curiosities[0] ? "active" : ""}" data-url="${el.img}">

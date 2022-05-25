@@ -4,6 +4,7 @@ import {Loader} from "../components/Loader.js";
 import {ajax} from "./ajax.js";
 import {extractParameter} from "./extract-parameter.js";
 
+/*Esta función abre una ventana de información especial para ver información mas detallada ya sea de los personajes o de los episodios. Detecta si en el HASH existe un "ID" (que es el parametro que activa la función), obtiene el dato y pinta la información del elemento en pantalla con la ayuda de sus correspondientes Componente (CharacterInfo() y EpisodeInfo()) */
 export function openInfoWindow() {
 	if (location.hash.includes("/ID=")) {
 		document.querySelector(".info__container").classList.add("active");
@@ -33,10 +34,10 @@ export function openInfoWindow() {
 				},
 			});
 		} else if (location.hash.includes("#/episodes")) {
+			l;
 			ajax({
 				url: `https://api.tvmaze.com/episodes/${extractParameter(location.hash, "ID")}`,
 				cbSuccess: (json) => {
-					console.log(json);
 					$div.innerHTML = EpisodeInfo(json);
 				},
 				cbError: (err) => {

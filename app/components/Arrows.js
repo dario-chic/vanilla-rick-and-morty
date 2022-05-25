@@ -1,3 +1,5 @@
+/* Crea un componente para crear las flechas que permiten el desplazamiento entre pág/nas de la API, 
+se pitan según haya o no páginas para avanzar o retroceder.*/
 export function Arrows(json) {
 	let html = ``;
 

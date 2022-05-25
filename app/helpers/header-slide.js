@@ -1,5 +1,8 @@
 const d = document;
 
+/*Esta función realiza el funcionamiento del carrusel de curiosidades en el MainHeader, agrega los eventos a las flechas y coloca un setInterval que
+cambia la curiosidad automáticamente cada 5 segundos */
+
 export default function slider(right, left, slides) {
 	const $nextBtn = d.querySelector(right),
 		$prevBtn = d.querySelector(left),

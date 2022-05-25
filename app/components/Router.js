@@ -11,11 +11,9 @@ import {Container} from "./Container.js";
 import {Arrows} from "./Arrows.js";
 import {extractParameter} from "../helpers/extract-parameter.js";
 import pagination from "../helpers/pagination.js";
-import {changeHash} from "../helpers/change-hash.js";
 import {ArrowContainer} from "./ArrowContainer.js";
 import {SearchEpisodes} from "./episodes/SearchEpisodes.js";
 import {Episode} from "./episodes/Episode.js";
-// import {filtersDetection} from "../helpers/filters-detection.js";
 
 export async function Router() {
 	const d = document,
@@ -24,10 +22,9 @@ export async function Router() {
 	let {hash} = location;
 
 	if (!hash || hash === "#/" || hash.includes("#/ID=")) {
-		const $header = d.querySelector("header");
-
 		d.querySelector(".nav__links-home").classList.add("active");
-		// Main Header
+
+		const $header = d.querySelector("header");
 
 		if (!d.querySelector(".header__main-content")) {
 			const $mainHeader = MainHeader(),
@@ -111,12 +108,10 @@ export async function Router() {
 		} else {
 		}
 
-		let home = d.querySelectorAll(".home");
-		home.forEach((el) => (el.style.display = ""));
+		d.querySelectorAll(".home").forEach((el) => (el.style.display = ""));
 	} else {
-		let home = d.querySelectorAll(".home");
-		home.forEach((el) => (el.style.display = "none"));
 		d.querySelector(".nav__links-home").classList.remove("active");
+		d.querySelectorAll(".home").forEach((el) => (el.style.display = "none"));
 	}
 
 	if (hash === "#/characters" || hash.includes("#/characters")) {
@@ -135,23 +130,19 @@ export async function Router() {
 		const $Characters = d.querySelector(".container.characters"),
 			$CharactersLoader = d.querySelector(".main-characters__loader");
 
-		let reg = /ID=[0-9]+\//gi;
-
 		let lastUrl = JSON.parse(localStorage.getItem("lastHash")) || "";
 
 		if ((!hash.includes("ID=") && !lastUrl.includes("ID=")) || lastUrl == null || $Characters.innerHTML === "" || !lastUrl.includes("#/characters")) {
-			// console.log("a");
+			d.querySelectorAll(".next-and-prev-buttons").forEach((el) => el.classList.add("off"));
+
 			$CharactersLoader.classList.remove("off");
 			$Characters.innerHTML = null;
-
-			d.querySelectorAll(".next-and-prev-buttons").forEach((el) => el.classList.add("off"));
 
 			let characterPage = extractParameter(hash, "page") || 1,
 				name = extractParameter(hash, "name") || "",
 				gender = extractParameter(hash, "gender") || "",
 				status = extractParameter(hash, "status") || "",
 				filters = `?page=${characterPage}${name ? `&name=${name}` : ""}${gender ? `&gender=${gender}` : ""}${status ? `&status=${status}` : ""}`;
-
 			const $fragment = d.createDocumentFragment();
 
 			ajax({
@@ -196,7 +187,6 @@ export async function Router() {
 		pagination.character.status = null;
 		pagination.character.name = null;
 		pagination.character.page = 1;
-		// changeHash();
 	}
 
 	if (hash === "#/episodes" || hash.includes("#/episodes")) {
@@ -227,8 +217,6 @@ export async function Router() {
 			let page = extractParameter(hash, "page") || 1,
 				nombre = extractParameter(hash, "name") || "",
 				episodeFilters = `?page=${page}${nombre ? `&name=${nombre}` : ""}`;
-
-			console.log(episodeFilters);
 			const $fragment = document.createDocumentFragment();
 
 			ajax({
@@ -247,6 +235,7 @@ export async function Router() {
 								$fragment.appendChild(Episode(episode, "episodes"));
 								if (el === json.results[json.results.length - 1]) {
 									$Episodes.appendChild($fragment);
+									$EpisodesLoader.classList.add("off");
 								}
 							},
 							cbError: (err) => {
@@ -271,8 +260,6 @@ export async function Router() {
 					d.querySelector(".next-and-prev-buttons.episodes").innerHTML = null;
 					d.querySelector(".next-and-prev-buttons.episodes").innerHTML = Arrows(json);
 					d.querySelector(".next-and-prev-buttons.episodes").classList.remove("off");
-
-					$EpisodesLoader.classList.add("off");
 				},
 				cbError: (err) => {
 					console.log(err);
@@ -300,5 +287,17 @@ export async function Router() {
 
 		pagination.episodes.page = 1;
 		pagination.episodes.name = null;
+	}
+
+	if (hash.includes("#/") && hash !== "#/" && !hash.includes("#/ID=") && !hash.includes("#/characters") && !hash.includes("#/episodes")) {
+		console.log($main);
+		// $main.innerHTML = `<div class="error-container" id='bad-url'>
+		// <h3 class="error-message" >ERROR</h3>
+		// <p>There are no results for this request or something else is going wrong</p>
+		// <button class="go-home" onclick="this.parentElement.parentElement.removeChild(document.getElementById('bad-url')); location.hash='#/'">Go Home</button>
+		// </div>
+		// `;
+
+		location.hash = "#/";
 	}
 }

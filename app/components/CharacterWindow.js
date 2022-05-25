@@ -15,11 +15,6 @@ export function CharacterWindow() {
 
 			localStorage.setItem("lastHash", JSON.stringify(location.hash));
 			location.hash += location.hash.slice(-1) == "/" ? `ID=${ID}/` : `/ID=${ID}/`;
-			// console.log(location.hash);
-
-			// setTimeout(() => {
-			// 	console.log(location.hash);
-			// }, 100);
 		}
 
 		if (e.target.matches(".close *") || e.target.matches(".info__container")) {

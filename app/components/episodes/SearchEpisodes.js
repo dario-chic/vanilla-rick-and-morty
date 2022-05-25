@@ -6,19 +6,6 @@ export function SearchEpisodes() {
 		$div = d.createElement("div");
 	$div.classList.add("search-episodes", "episodes");
 
-	// 	$div.innerHTML = `
-	//   <form class="search-episodes__form" id="search-episodes">
-	//   <div class="episodes-filter">
-	// <label for="season">  Season</label>
-	// <input type="number" name="season">
-	// <br class="br">
-	// <br class="br">
-	// <label for="episode">Episode</label>
-	// <input type="number" name="episode">
-	// </div>
-	// <button class="search-submit"><i class="fa-solid fa-magnifying-glass" ></i></button>
-	//   </form>
-	//   `;
 	$div.innerHTML = `  <form class="search-episode" id="search-episode">
 <input type="search" name="search" placeholder="Search...">
 <button class="submit-episode"><i class="fa-solid fa-magnifying-glass" ></i></button>

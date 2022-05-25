@@ -708,7 +708,8 @@ a {
 	font-size: 1.4rem;
 }
 
-.go-back {
+.go-back,
+.go-home {
 	display: block;
 	margin: auto;
 	padding: 0.6rem 3rem;
@@ -721,7 +722,8 @@ a {
 	background-color: var(--green);
 }
 
-.go-back:hover {
+.go-back:hover,
+.go-home:hover {
 	background-color: var(--darkGreen);
 }
 

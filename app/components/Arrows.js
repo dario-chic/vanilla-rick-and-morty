@@ -1,6 +1,4 @@
 export function Arrows(json) {
-	const d = document;
-
 	let html = ``;
 
 	html += json.info.prev

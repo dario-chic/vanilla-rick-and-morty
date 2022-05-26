@@ -169,7 +169,7 @@ export async function Router() {
 		<div class="error-container">
 				<h3 class="error-message">Error: ${err.status} <br> ${statusText}</h3>
 				<p>There are no results for this request or something else is going wrong</p>
-				<button class="go-back">Go back</button><br><button class="go-home" >Reload</button>
+				<button class="go-back">Go back</button><br><button class="go-home" onclick="window.location.reload()" >Reload</button>
 				</div> 
 				`;
 					$CharactersLoader.classList.add("off");
@@ -239,7 +239,7 @@ export async function Router() {
 						<div class="error-container">
 								<h3 class="error-message">Error: ${err.status} <br> ${statusText}</h3>
 								<p>There are no results for this request or something else is going wrong</p>
-								<button class="go-back">Go back</button>
+								<button class="go-back">Go back</button><br><button class="go-home" onclick="window.location.reload()" >Reload</button>
 								</div> 
 								`;
 								$EpisodesLoader.classList.add("off");
@@ -262,7 +262,7 @@ export async function Router() {
 			<div class="error-container">
 					<h3 class="error-message">Error: ${err.status} <br> ${statusText}</h3>
 					<p>There are no results for this request or something else is going wrong</p>
-					<button class="go-back">Go back</button>
+					<button class="go-back">Go back</button><br><button class="go-home" onclick="window.location.reload()" >Reload</button>
 					</div> 
 					`;
 					$EpisodesLoader.classList.add("off");

@@ -6,7 +6,7 @@
 ![Portada](https://raw.githubusercontent.com/dario-chic/vanilla-rick-and-morty/refs/heads/main/banner.webp)
 ![Badge](https://img.shields.io/badge/Estado-Finalizado-brightgreen)
 ![Badge](https://img.shields.io/badge/Licencia-MIT-blue)
-## Tabla de contenidos
+## Table of contents
 
 - [Description](#description)
 - [Main features](#main-features)

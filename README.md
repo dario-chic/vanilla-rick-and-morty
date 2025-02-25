@@ -63,8 +63,6 @@ While the  **Rick and Morty API**  provided a solid foundation, it lacked suffic
 
 ## How to use
 
-Proporciona instrucciones claras sobre cómo instalar y configurar el proyecto localmente.
-
 1. Clone the repository:
    ```bash
    git clone https://github.com/dario-chic/vanilla-rick-and-morty.git

@@ -14,7 +14,7 @@ export function Footer() {
   <a href="mailto:dariochic@gmail.com" target="_blank" rel="noopener"><i class="fa-solid fa-envelope"></i></a>
   <a href="https://github.com/Dario-Chic" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i></a>
   </div>
-  <a href="https://www.dariochic.com" class="footer__personal-website">www.dariochic.com</a>
+  <a href="https://www.dariochic.dev" class="footer__personal-website">www.dariochic.dev</a>
   `;
 
 	return $footer;
